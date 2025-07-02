@@ -1,0 +1,122 @@
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Reporte de Ingresos Mensuales</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Filtros de Búsqueda</h6>
+        </div>
+        <div class="card-body">
+            <form id="filtroForm" class="row g-3">
+                <div class="col-md-4">
+                    <label for="mes" class="form-label">Mes</label>
+                    <select class="form-select" id="mes" name="mes">
+                        <option value="">Todos los meses</option>
+                        <option value="01">Enero</option>
+                        <option value="02">Febrero</option>
+                        <option value="03">Marzo</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Mayo</option>
+                        <option value="06">Junio</option>
+                        <option value="07">Julio</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="anio" class="form-label">Año</label>
+                    <select class="form-select" id="anio" name="anio">
+                        <option value="">Todos los años</option>
+                        <% const currentYear = new Date().getFullYear(); %>
+                        <% for(let year = currentYear - 2; year <= currentYear + 2; year++) { %>
+                            <option value="<%= year %>" <%= anio && year.toString() === anio.toString() ? 'selected' : '' %>><%= year %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search me-2"></i>Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Resumen de Ingresos</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="tablaIngresos" width="100%" cellspacing="0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tipo de Ingreso</th>
+                            <th class="text-end">Cantidad de Pagos</th>
+                            <th class="text-end">Total Ingresos (S/.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (ingresosMensuales && ingresosMensuales.length > 0) { %>
+                            <% let totalGeneral = 0; %>
+                            <% let totalPagos = 0; %>
+                            
+                            <% ingresosMensuales.forEach(ingreso => { %>
+                                <% totalGeneral += parseFloat(ingreso.total_ingresos || 0); %>
+                                <% totalPagos += parseInt(ingreso.cantidad_pagos || 0); %>
+                                <tr>
+                                    <td><%= ingreso.tipo %></td>
+                                    <td class="text-end"><%= ingreso.cantidad_pagos %></td>
+                                    <td class="text-end">S/. <%= parseFloat(ingreso.total_ingresos).toFixed(2) %></td>
+                                </tr>
+                            <% }); %>
+                            
+                            <tr class="fw-bold">
+                                <td>TOTAL</td>
+                                <td class="text-end"><%= totalPagos %></td>
+                                <td class="text-end">Bs/. <%= totalGeneral.toFixed(2) %></td>
+                            </tr>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="3" class="text-center">No se encontraron registros para los filtros seleccionados</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Establecer los valores de los filtros desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const mes = urlParams.get('mes');
+        const anio = urlParams.get('anio');
+        
+        if (mes) document.getElementById('mes').value = mes;
+        if (anio) document.getElementById('anio').value = anio;
+
+        // Inicializar DataTable
+        if (document.getElementById('tablaIngresos')) {
+            $('#tablaIngresos').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                },
+                order: [[0, 'asc']],
+                pageLength: 10,
+                responsive: true,
+                dom: '<"d-flex justify-content-between align-items-center mb-3"f<"d-flex align-items-center">>rt<"d-flex justify-content-between align-items-center"ip>',
+                initComplete: function() {
+                    $('.dataTables_filter input').addClass('form-control');
+                    $('.dataTables_length select').addClass('form-select');
+                }
+            });
+        }
+    });
+</script>

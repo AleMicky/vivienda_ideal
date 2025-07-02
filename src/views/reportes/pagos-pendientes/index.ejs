@@ -1,0 +1,143 @@
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Reporte de Pagos Pendientes</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Filtros de Búsqueda</h6>
+        </div>
+        <div class="card-body">
+            <form id="filtroForm" class="row g-3">
+                <div class="col-md-4">
+                    <label for="mes" class="form-label">Mes</label>
+                    <select class="form-select" id="mes" name="mes">
+                        <option value="">Todos los meses</option>
+                        <option value="01">Enero</option>
+                        <option value="02">Febrero</option>
+                        <option value="03">Marzo</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Mayo</option>
+                        <option value="06">Junio</option>
+                        <option value="07">Julio</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="anio" class="form-label">Año</label>
+                    <select class="form-select" id="anio" name="anio">
+                        <option value="">Todos los años</option>
+                        <% const currentYear = new Date().getFullYear(); %>
+                        <% for(let year = currentYear - 2; year <= currentYear + 2; year++) { %>
+                            <option value="<%= year %>" <%= year === currentYear ? 'selected' : '' %>><%= year %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search me-2"></i>Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Listado de Pagos Pendientes</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="tablaPagos" width="100%" cellspacing="0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Inmueble</th>
+                            <th>Monto</th>
+                            <th>Fecha de Pago</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (typeof pagosPendientes !== 'undefined' && pagosPendientes.length > 0) { %>
+                            <% pagosPendientes.forEach(pago => { %>
+                                <tr>
+                                    <td><%= pago.cliente %></td>
+                                    <td><%= pago.inmueble %></td>
+                                    <td class="text-end">$<%= parseFloat(pago.monto).toFixed(2) %></td>
+                                    <td><%= new Date(pago.fecha_pago).toLocaleDateString('es-ES') %></td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">
+                                            <%= pago.estado.charAt(0).toUpperCase() + pago.estado.slice(1) %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" class="text-center">No se encontraron pagos pendientes</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                    <% if (typeof pagosPendientes !== 'undefined' && pagosPendientes.length > 0) { %>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2" class="text-end">Total:</th>
+                                <th class="text-end">
+                                    $<%= pagosPendientes.reduce((total, pago) => total + parseFloat(pago.monto), 0).toFixed(2) %>
+                                </th>
+                                <th colspan="2"></th>
+                            </tr>
+                        </tfoot>
+                    <% } %>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar DataTable
+        const tabla = $('#tablaPagos').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            order: [[3, 'asc']], // Ordenar por fecha de pago por defecto
+            columnDefs: [
+                { targets: 2, className: 'text-end' }, // Alinear montos a la derecha
+                { targets: 3, type: 'date-eu' } // Especificar que la columna de fecha usa formato europeo
+            ]
+        });
+
+        // Manejar el envío del formulario
+        document.getElementById('filtroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const params = new URLSearchParams();
+            
+            // Agregar solo los parámetros que tienen valor
+            for (const [key, value] of formData.entries()) {
+                if (value) {
+                    params.append(key, value);
+                }
+            }
+            
+            // Recargar la página con los parámetros de búsqueda
+            window.location.href = window.location.pathname + '?' + params.toString();
+        });
+
+        // Establecer los valores de los filtros desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const mes = urlParams.get('mes');
+        const anio = urlParams.get('anio');
+        
+        if (mes) document.getElementById('mes').value = mes;
+        if (anio) document.getElementById('anio').value = anio;
+    });
+</script>

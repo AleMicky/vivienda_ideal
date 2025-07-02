@@ -1,0 +1,110 @@
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Listado de Inmuebles</h1>
+        <a href="/inmuebles/nuevo" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i> Nuevo Inmueble
+        </a>
+    </div>
+
+    <% if (messages.error_msg && messages.error_msg.length > 0) { %>
+        <% messages.error_msg.forEach(msg => { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= msg %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% }); %>
+    <% } %>
+
+    <% if (messages.success_msg && messages.success_msg.length > 0) { %>
+        <% messages.success_msg.forEach(msg => { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= msg %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% }); %>
+    <% } %>
+
+    <% if (inmuebles && inmuebles.length > 0) { %>
+        <div class="row g-4">
+            <% inmuebles.forEach(inmueble => { %>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="position-relative">
+                         
+                            <span class="position-absolute top-0 end-0 m-2 badge <%= inmueble.disponible ? 'bg-success' : 'bg-danger' %>">
+                                <%= inmueble.disponible ? 'Disponible' : 'No Disponible' %>
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><%= inmueble.direccion %></h5>
+                            <h6 class="text-primary mb-3">$<%= new Intl.NumberFormat('es-CL').format(inmueble.precio) %></h6>
+                            
+                            <div class="mb-2">
+                                <span class="badge bg-info text-dark me-1">
+                                    <i class="bi bi-tag"></i> <%= inmueble.tipo %>
+                                </span>
+                                <span class="badge bg-secondary">
+                                    <i class="bi bi-geo-alt"></i> <%= inmueble.ciudad %>
+                                </span>
+                            </div>
+                            
+                            <p class="card-text text-muted small mb-3">
+                                <i class="bi bi-person"></i> Propietario: <%= inmueble.propietario %>
+                            </p>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="/inmuebles/<%= inmueble.id_inmueble %>" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Ver Detalles
+                                </a>
+                                <div class="btn-group">
+                                    <a href="/inmuebles/editar/<%= inmueble.id_inmueble %>" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-danger" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#eliminarModal<%= inmueble.id_inmueble %>">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal de confirmación de eliminación -->
+                    <div class="modal fade" id="eliminarModal<%= inmueble.id_inmueble %>" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Confirmar Eliminación</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Estás seguro de que deseas eliminar el inmueble en <strong><%= inmueble.direccion %></strong>?
+                                    Esta acción no se puede deshacer.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <form action="/inmuebles/eliminar/<%= inmueble.id_inmueble %>" method="POST" class="d-inline">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <div class="alert alert-info">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-info-circle me-2"></i>
+                <div>
+                    <h5 class="mb-1">No hay inmuebles registrados</h5>
+                    <p class="mb-0">Comienza agregando tu primer inmueble haciendo clic en el botón "Nuevo Inmueble".</p>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>

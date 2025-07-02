@@ -1,0 +1,277 @@
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse" style="background: linear-gradient(180deg, #1a237e 0%, #283593 100%); box-shadow: 2px 0 10px rgba(0,0,0,0.1);">
+  <div class="position-sticky pt-4 sidebar-sticky">
+    <ul class="nav flex-column px-2">
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath === '/' ? ' active' : ' text-white-50'%>" 
+           style="<%= currentPath === '/' ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : '' %>"
+           href="/">
+          <i class="bi bi-house-door me-3"></i>
+          <span>Inicio</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/inmuebles')?' active':' text-white-50'%>" 
+           style="<%=currentPath.startsWith('/inmuebles')?'background: rgba(255, 255, 255, 0.1); color: white !important;':' '%>"
+           href="/inmuebles">
+          <i class="bi bi-building me-3"></i>
+          <span>Inmuebles</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/clientes') ? ' active' : ' text-white-50'%>" 
+           style="<%=currentPath.startsWith('/clientes') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
+           href="/clientes">
+          <i class="bi bi-people me-3"></i>
+          <span>Clientes</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item mb-3">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/visitas') ? ' active' : ' text-white-50'%>" 
+           style="<%=currentPath.startsWith('/visitas') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
+           href="/visitas">
+          <i class="bi bi-calendar-check me-3"></i>
+          <span>Visitas</span>
+        </a>
+      </li> -->
+    </ul>
+
+    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-2 text-uppercase text-white-50" style="font-size: 0.7rem; letter-spacing: 1px;">
+      <span>Reportes</span>
+      <a class="link-secondary" href="#" aria-label="Reportes">
+        <span data-feather="bar-chart-2"></span>
+      </a>
+    </h6>
+    <ul class="nav flex-column mb-2">
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/reportes/contratos') ? ' active' : ' text-white-50'%>" 
+           style="<%=currentPath.startsWith('/reportes/contratos') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
+           href="/reportes/contratos">
+          <i class="bi bi-file-earmark-text me-3"></i>
+          <span>Contratos</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/reportes/pagos-pendientes') ? ' active' : ' text-white-50'%>" 
+           style="<%=currentPath.startsWith('/reportes/pagos-pendientes') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
+           href="/reportes/pagos-pendientes">
+          <i class="bi bi-clock-history me-3"></i>
+          <span>Pagos Pendientes</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/reportes/ingresos-mensuales') ? ' active' : ' text-white-50'%>" 
+           style="<%=currentPath.startsWith('/reportes/ingresos-mensuales') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
+           href="/reportes/ingresos-mensuales">
+          <i class="bi bi-cash-coin me-3"></i>
+          <span>Ingresos Mensuales</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/reportes/comisiones') ? ' active' : ' text-white-50'%>" 
+           style="<%=currentPath.startsWith('/reportes/comisiones') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
+           href="/reportes/comisiones">
+          <i class="bi bi-currency-dollar me-3"></i>
+          <span>Comisiones</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/reportes/visitas-inmuebles') ? ' active' : ' text-white-50'%>" 
+           style="<%=currentPath.startsWith('/reportes/visitas-inmuebles') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
+           href="/reportes/visitas-inmuebles">
+          <i class="bi bi-house-check me-3"></i>
+          <span>Visitas a Inmuebles</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<style>
+:root {
+    --sidebar-width: 250px;
+    --sidebar-bg: #1a1f33;
+    --sidebar-text: #e9ecef;
+    --sidebar-hover: rgba(255, 255, 255, 0.1);
+    --sidebar-active: #4361ee;
+}
+
+.sidebar-wrapper {
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1030;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-menu {
+    padding: 1rem 0.5rem;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
+}
+
+.nav-link {
+    color: var(--sidebar-text);
+    padding: 0.6rem 1rem;
+    margin: 0.2rem 0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.nav-link i {
+    width: 24px;
+    text-align: center;
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.nav-link:hover {
+    background-color: var(--sidebar-hover);
+    color: white;
+}
+
+.nav-link.active {
+    background-color: var(--sidebar-active);
+    color: white;
+    font-weight: 500;
+}
+
+/* Scrollbar personalizada */
+.sidebar-menu::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+/* Estilos para cuando el sidebar está colapsado */
+body.sidebar-collapsed .sidebar-wrapper {
+    width: 70px;
+}
+
+body.sidebar-collapsed .sidebar-header h5,
+body.sidebar-collapsed .nav-link span,
+body.sidebar-collapsed .dropdown-toggle::after {
+    display: none;
+}
+
+body.sidebar-collapsed .nav-link {
+    justify-content: center;
+    padding: 0.8rem 0;
+}
+
+body.sidebar-collapsed .nav-link i {
+    margin-right: 0;
+    font-size: 1.2rem;
+}
+
+/* Ajustar el contenido cuando el sidebar está colapsado */
+body.sidebar-collapsed #page-content-wrapper {
+    margin-left: 70px !important;
+}
+
+/* Estilos responsivos */
+@media (max-width: 991.98px) {
+    .sidebar-wrapper {
+        transform: translateX(-100%);
+        z-index: 1040;
+    }
+    
+    body.sidebar-show .sidebar-wrapper {
+        transform: translateX(0);
+    }
+    
+    body.sidebar-show .sidebar-overlay {
+        display: block;
+        opacity: 1;
+    }
+}
+  .hover-effect:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
+    transform: translateX(5px);
+    transition: all 0.3s ease;
+  }
+  
+  .sidebar {
+    min-height: 100vh;
+    transition: all 0.3s;
+  }
+  
+  .nav-link {
+    transition: all 0.3s ease;
+  }
+  
+  .nav-link.active {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+    font-weight: 500;
+  }
+  
+  .nav-link i {
+    width: 20px;
+    text-align: center;
+  }
+</style>
+
+<script>
+// Toggle sidebar
+const sidebarToggle = document.getElementById('sidebarToggle');
+const body = document.body;
+
+function toggleSidebar() {
+    if (window.innerWidth >= 992) {
+        body.classList.toggle('sidebar-collapsed');
+        localStorage.setItem('sidebarCollapsed', body.classList.contains('sidebar-collapsed'));
+    } else {
+        body.classList.toggle('sidebar-show');
+    }
+}
+
+// Event listeners
+if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleSidebar();
+    });
+}
+
+// Cerrar sidebar al hacer clic en un enlace en móviles
+document.querySelectorAll('.sidebar-menu .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth < 992) {
+            body.classList.remove('sidebar-show');
+        }
+    });
+});
+
+// Cargar estado guardado
+if (localStorage.getItem('sidebarCollapsed') === 'true' && window.innerWidth >= 992) {
+    body.classList.add('sidebar-collapsed');
+}
+
+// Manejar cambio de tamaño de ventana
+window.addEventListener('resize', () => {
+    if (window.innerWidth >= 992) {
+        body.classList.remove('sidebar-show');
+    }
+});
+</script>

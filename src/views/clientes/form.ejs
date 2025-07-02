@@ -1,0 +1,161 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-6">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+          <div class="d-flex align-items-center">
+            <div class="avatar bg-primary bg-opacity-10 text-primary rounded-circle me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+              <i class="fas <%= modo === 'crear' ? 'fa-user-plus' : 'fa-user-edit' %>"></i>
+            </div>
+            <h2 class="h5 mb-0">
+              <%= modo === 'crear' ? 'Nuevo Cliente' : 'Editar Cliente' %>
+              <% if (cliente?.id_cliente) { %>
+                <small class="text-muted">#<%= cliente.id_cliente %></small>
+              <% } %>
+            </h2>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <form action="<%= accion %>" method="POST" novalidate>
+            <!-- Campo Nombre -->
+            <div class="mb-4">
+              <label for="nombre" class="form-label fw-semibold">
+                <i class="fas fa-user me-1 text-primary"></i> Nombre Completo
+                <span class="text-danger">*</span>
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-user text-muted"></i>
+                </span>
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg" 
+                  id="nombre" 
+                  name="nombre" 
+                  value="<%= cliente?.nombre || '' %>" 
+                  placeholder="Ej: Juan Pérez" 
+                  required
+                >
+              </div>
+              <div class="form-text">Ingrese el nombre completo del cliente</div>
+            </div>
+
+            <!-- Campo CI -->
+            <div class="mb-4">
+              <label for="ci" class="form-label fw-semibold">
+                <i class="fas fa-id-card me-1 text-primary"></i> Cédula de Identidad
+                <span class="text-danger">*</span>
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-id-card text-muted"></i>
+                </span>
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg" 
+                  id="ci" 
+                  name="ci" 
+                  value="<%= cliente?.ci || '' %>" 
+                  placeholder="Ej: 12345678" 
+                  required
+                  pattern="\d{6,10}"
+                  title="La cédula debe contener entre 6 y 10 dígitos"
+                >
+              </div>
+              <div class="form-text">Ingrese solo números, sin puntos ni guiones</div>
+            </div>
+
+            <!-- Campo Teléfono -->
+            <div class="mb-4">
+              <label for="telefono" class="form-label fw-semibold">
+                <i class="fas fa-phone me-1 text-primary"></i> Teléfono
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-phone text-muted"></i>
+                </span>
+                <input 
+                  type="tel" 
+                  class="form-control form-control-lg" 
+                  id="telefono" 
+                  name="telefono" 
+                  value="<%= cliente?.telefono || '' %>" 
+                  placeholder="Ej: 4123456789"
+                  pattern="[0-9]{10,15}"
+                  title="Ingrese un número de teléfono válido (10-15 dígitos)"
+                >
+              </div>
+              <div class="form-text">Número de contacto del cliente</div>
+            </div>
+
+            <!-- Campo Email -->
+            <div class="mb-4">
+              <label for="email" class="form-label fw-semibold">
+                <i class="fas fa-envelope me-1 text-primary"></i> Correo Electrónico
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-envelope text-muted"></i>
+                </span>
+                <input 
+                  type="email" 
+                  class="form-control form-control-lg" 
+                  id="email" 
+                  name="email" 
+                  value="<%= cliente?.email || '' %>" 
+                  placeholder="ejemplo@correo.com"
+                >
+              </div>
+              <div class="form-text">Correo electrónico de contacto</div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4 pt-3 border-top">
+              <a href="/clientes" class="btn btn-outline-secondary px-4 me-md-2">
+                <i class="fas fa-times me-1"></i> Cancelar
+              </a>
+              <button type="submit" class="btn btn-primary px-4">
+                <i class="fas fa-save me-1"></i> 
+                <%= modo === 'crear' ? 'Crear Cliente' : 'Guardar Cambios' %>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script para validación del formulario -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Seleccionar el formulario
+  const form = document.querySelector('form');
+  
+  // Validación al enviar el formulario
+  form.addEventListener('submit', function(event) {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  }, false);
+  
+  // Validación en tiempo real para CI (solo números)
+  const ciInput = document.getElementById('ci');
+  if (ciInput) {
+    ciInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+  }
+  
+  // Validación en tiempo real para teléfono (solo números)
+  const telefonoInput = document.getElementById('telefono');
+  if (telefonoInput) {
+    telefonoInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9+]/g, '');
+    });
+  }
+});
+</script>

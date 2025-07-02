@@ -1,0 +1,89 @@
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Reporte de Visitas a Inmuebles</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Resumen de Visitas</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="tablaVisitas" width="100%" cellspacing="0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Dirección del Inmueble</th>
+                            <th class="text-center">Visitas Realizadas</th>
+                            <th>Clientes Interesados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (typeof visitas !== 'undefined' && visitas.length > 0) { %>
+                            <% let totalVisitas = 0; %>
+                            
+                            <% visitas.forEach(visita => { %>
+                                <% totalVisitas += parseInt(visita.cantidad_visitas || 0); %>
+                                <tr>
+                                    <td><%= visita.direccion %></td>
+                                    <td class="text-center">
+                                        <span class="badge bg-primary rounded-pill">
+                                            <%= visita.cantidad_visitas %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (visita.clientes_interesados) { %>
+                                            <% const clientes = visita.clientes_interesados.split(', '); %>
+                                            <% clientes.forEach((cliente, index) => { %>
+                                                <span class="badge bg-info text-dark me-1 mb-1">
+                                                    <i class="fas fa-user me-1"></i><%= cliente %>
+                                                </span>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <span class="text-muted">Sin clientes interesados</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                            
+                            <tr class="fw-bold">
+                                <td>TOTAL</td>
+                                <td class="text-center"><%= totalVisitas %></td>
+                                <td>-</td>
+                            </tr>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="3" class="text-center">No se encontraron registros de visitas</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar DataTable
+        if (document.getElementById('tablaVisitas')) {
+            $('#tablaVisitas').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json',
+                    decimal: '.',
+                    thousands: ','
+                },
+                order: [[1, 'desc']], // Ordenar por cantidad de visitas por defecto
+                pageLength: 10,
+                responsive: true,
+                dom: '<"d-flex justify-content-between align-items-center mb-3"f<"d-flex align-items-center">>rt<"d-flex justify-content-between align-items-center"ip>',
+                columnDefs: [
+                    { orderable: false, targets: 2 } // Deshabilitar ordenación en la columna de clientes
+                ],
+                initComplete: function() {
+                    $('.dataTables_filter input').addClass('form-control');
+                    $('.dataTables_length select').addClass('form-select');
+                }
+            });
+        }
+    });
+</script>

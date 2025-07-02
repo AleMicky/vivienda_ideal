@@ -1,0 +1,280 @@
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0"><%= modo === 'editar' ? 'Editar' : 'Nuevo' %> Inmueble</h1>
+        <a href="/inmuebles" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Volver
+        </a>
+    </div>
+
+    <% if (typeof messages !== 'undefined' && messages.error_msg && messages.error_msg.length > 0) { %>
+        <% messages.error_msg.forEach(msg => { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= msg %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% }); %>
+    <% } %>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form action="<%= accion %>" method="POST" class="needs-validation" novalidate>
+                <% if (modo === 'editar') { %>
+                    <input type="hidden" name="_method" value="PUT">
+                <% } %>
+                
+                <div class="row g-3">
+                    <!-- Dirección -->
+                    <div class="col-md-12">
+                        <label for="direccion" class="form-label">Dirección <span class="text-danger">*</span></label>
+                        <input type="text" 
+                               class="form-control <%= locals.errors && errors.direccion ? 'is-invalid' : '' %>" 
+                               id="direccion" 
+                               name="direccion" 
+                               value="<%= inmueble.direccion || '' %>" 
+                               required>
+                        <% if (locals.errors && errors.direccion) { %>
+                            <div class="invalid-feedback">
+                                <%= errors.direccion.msg %>
+                            </div>
+                        <% } else { %>
+                            <div class="invalid-feedback">
+                                Por favor ingrese la dirección del inmueble.
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Precio -->
+                    <div class="col-md-6">
+                        <label for="precio" class="form-label">Precio ($) <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" 
+                                   class="form-control <%= locals.errors && errors.precio ? 'is-invalid' : '' %>" 
+                                   id="precio" 
+                                   name="precio" 
+                                   min="0" 
+                                   step="0.01"
+                                   value="<%= inmueble.precio || '' %>" 
+                                   required>
+                            <% if (locals.errors && errors.precio) { %>
+                                <div class="invalid-feedback">
+                                    <%= errors.precio.msg %>
+                                </div>
+                            <% } else { %>
+                                <div class="invalid-feedback">
+                                    Por favor ingrese un precio válido.
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Tipo -->
+                    <div class="col-md-6">
+                        <label for="tipo" class="form-label">Tipo de Inmueble <span class="text-danger">*</span></label>
+                        <select class="form-select <%= locals.errors && errors.tipo ? 'is-invalid' : '' %>" 
+                                id="tipo" 
+                                name="tipo" 
+                                required>
+                            <option value="" disabled <%= !inmueble.tipo ? 'selected' : '' %>>Seleccione un tipo</option>
+                            <option value="Casa" <%= inmueble.tipo === 'Casa' ? 'selected' : '' %>>Casa</option>
+                            <option value="Departamento" <%= inmueble.tipo === 'Departamento' ? 'selected' : '' %>>Departamento</option>
+                            <option value="Oficina" <%= inmueble.tipo === 'Oficina' ? 'selected' : '' %>>Oficina</option>
+                            <option value="Local" <%= inmueble.tipo === 'Local' ? 'selected' : '' %>>Local Comercial</option>
+                            <option value="Terreno" <%= inmueble.tipo === 'Terreno' ? 'selected' : '' %>>Terreno</option>
+                        </select>
+                        <% if (locals.errors && errors.tipo) { %>
+                            <div class="invalid-feedback">
+                                <%= errors.tipo.msg %>
+                            </div>
+                        <% } else { %>
+                            <div class="invalid-feedback">
+                                Por favor seleccione un tipo de inmueble.
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Características -->
+                    <div class="col-12">
+                        <label for="caracteristicas" class="form-label">Características</label>
+                        <textarea class="form-control <%= locals.errors && errors.caracteristicas ? 'is-invalid' : '' %>" 
+                                  id="caracteristicas" 
+                                  name="caracteristicas" 
+                                  rows="3"><%= inmueble.caracteristicas || '' %></textarea>
+                        <% if (locals.errors && errors.caracteristicas) { %>
+                            <div class="invalid-feedback">
+                                <%= errors.caracteristicas.msg %>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Disponibilidad -->
+                    <div class="col-md-6">
+                        <label class="form-label">Disponibilidad <span class="text-danger">*</span></label>
+                        <div class="form-check">
+                            <input class="form-check-input" 
+                                   type="radio" 
+                                   name="disponible" 
+                                   id="disponible_si" 
+                                   value="1" 
+                                   <%= (inmueble.disponible === undefined || inmueble.disponible) ? 'checked' : '' %> 
+                                   required>
+                            <label class="form-check-label" for="disponible_si">
+                                Disponible
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" 
+                                   type="radio" 
+                                   name="disponible" 
+                                   id="disponible_no" 
+                                   value="0"
+                                   <%= (inmueble.disponible !== undefined && !inmueble.disponible) ? 'checked' : '' %>>
+                            <label class="form-check-label" for="disponible_no">
+                                No disponible
+                            </label>
+                            <% if (locals.errors && errors.disponible) { %>
+                                <div class="invalid-feedback d-block">
+                                    <%= errors.disponible.msg %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- ID Ciudad -->
+                    <div class="col-md-6">
+                        <label for="id_ciudad" class="form-label">Ciudad <span class="text-danger">*</span></label>
+                        <select class="form-select <%= locals.errors && errors.id_ciudad ? 'is-invalid' : '' %>" 
+                                id="id_ciudad" 
+                                name="id_ciudad" 
+                                required>
+                            <option value="" disabled <%= !inmueble.id_ciudad ? 'selected' : '' %>>Seleccione una ciudad</option>
+                            <% if (typeof ciudades !== 'undefined') { %>
+                                <% ciudades.forEach(ciudad => { %>
+                                    <option value="<%= ciudad.id_ciudad %>" 
+                                            <%= (inmueble.id_ciudad == ciudad.id_ciudad) ? 'selected' : '' %>>
+                                        <%= ciudad.nombre %>
+                                    </option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                        <% if (locals.errors && errors.id_ciudad) { %>
+                            <div class="invalid-feedback">
+                                <%= errors.id_ciudad.msg %>
+                            </div>
+                        <% } else { %>
+                            <div class="invalid-feedback">
+                                Por favor seleccione una ciudad.
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- ID Propietario -->
+                    <div class="col-md-6">
+                        <label for="id_propietario" class="form-label">Propietario <span class="text-danger">*</span></label>
+                        <select class="form-select <%= locals.errors && errors.id_propietario ? 'is-invalid' : '' %>" 
+                                id="id_propietario" 
+                                name="id_propietario" 
+                                required>
+                            <option value="" disabled <%= !inmueble.id_propietario ? 'selected' : '' %>>Seleccione un propietario</option>
+                            <% if (typeof propietarios !== 'undefined') { %>
+                                <% propietarios.forEach(propietario => { %>
+                                    <option value="<%= propietario.id_cliente %>" 
+                                            <%= (inmueble.id_propietario == propietario.id_cliente) ? 'selected' : '' %>>
+                                        <%= propietario.nombre %>
+                                    </option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                        <% if (locals.errors && errors.id_propietario) { %>
+                            <div class="invalid-feedback">
+                                <%= errors.id_propietario.msg %>
+                            </div>
+                        <% } else { %>
+                            <div class="invalid-feedback">
+                                Por favor seleccione un propietario.
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <a href="/inmuebles" class="btn btn-outline-secondary me-md-2">
+                        <i class="bi bi-x-circle me-1"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i> 
+                        <%= modo === 'editar' ? 'Actualizar' : 'Guardar' %> Inmueble
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Script para la validación del formulario -->
+<script>
+// Ejemplo de validación del lado del cliente
+(function () {
+    'use strict'
+    
+    // Obtener todos los formularios a los que queremos aplicar estilos de validación de Bootstrap
+    var forms = document.querySelectorAll('.needs-validation')
+    
+    // Bucle sobre ellos y evitar el envío
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
+
+// Cargar ciudades y propietarios mediante AJAX
+// Implementa estas funciones según tu API
+function cargarCiudades() {
+    // Ejemplo con fetch
+    fetch('/api/ciudades')
+        .then(response => response.json())
+        .then(ciudades => {
+            const select = document.getElementById('id_ciudad');
+            const ciudadActual = '<%= inmueble.id_ciudad || "" %>';
+            
+            ciudades.forEach(ciudad => {
+                const option = document.createElement('option');
+                option.value = ciudad.id_ciudad;
+                option.textContent = ciudad.nombre;
+                option.selected = (ciudad.id_ciudad == ciudadActual);
+                select.appendChild(option);
+            });
+        });
+}
+
+function cargarPropietarios() {
+    // Ejemplo con fetch
+    fetch('/api/clientes')
+        .then(response => response.json())
+        .then(propietarios => {
+            const select = document.getElementById('id_propietario');
+            const propietarioActual = '<%= inmueble.id_propietario || "" %>';
+            
+            propietarios.forEach(propietario => {
+                const option = document.createElement('option');
+                option.value = propietario.id_cliente;
+                option.textContent = `${propietario.nombre} ${propietario.apellido || ''}`.trim();
+                option.selected = (propietario.id_cliente == propietarioActual);
+                select.appendChild(option);
+            });
+        });
+}
+
+// Cargar datos al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    cargarCiudades();
+    cargarPropietarios();
+});
+</script>

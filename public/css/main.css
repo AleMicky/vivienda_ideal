@@ -1,0 +1,54 @@
+/* Estilos generales */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Estilos del layout principal */
+#wrapper {
+    overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    transition: margin 0.25s ease-out;
+}
+
+#page-content-wrapper {
+    min-width: 100vw;
+    min-height: 100vh;
+    transition: all 0.25s ease-out;
+}
+
+/* Efecto de toggle del sidebar */
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+/* Estilos del header */
+.navbar {
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 0.15rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos del contenido principal */
+.container-fluid {
+    padding: 2rem 1.5rem;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+}
