@@ -12,25 +12,23 @@
                 <div class="col-md-4">
                     <label for="mes" class="form-label">Mes</label>
                     <select class="form-select" id="mes" name="mes">
-                        <option value="">Todos los meses</option>
-                        <option value="01">Enero</option>
-                        <option value="02">Febrero</option>
-                        <option value="03">Marzo</option>
-                        <option value="04">Abril</option>
-                        <option value="05">Mayo</option>
-                        <option value="06">Junio</option>
-                        <option value="07">Julio</option>
-                        <option value="08">Agosto</option>
-                        <option value="09">Septiembre</option>
-                        <option value="10">Octubre</option>
-                        <option value="11">Noviembre</option>
-                        <option value="12">Diciembre</option>
+                        <option value="01" <%= mes === '01' ? 'selected' : '' %>>Enero</option>
+                        <option value="02" <%= mes === '02' ? 'selected' : '' %>>Febrero</option>
+                        <option value="03" <%= mes === '03' ? 'selected' : '' %>>Marzo</option>
+                        <option value="04" <%= mes === '04' ? 'selected' : '' %>>Abril</option>
+                        <option value="05" <%= mes === '05' ? 'selected' : '' %>>Mayo</option>
+                        <option value="06" <%= mes === '06' ? 'selected' : '' %>>Junio</option>
+                        <option value="07" <%= mes === '07' ? 'selected' : '' %>>Julio</option>
+                        <option value="08" <%= mes === '08' ? 'selected' : '' %>>Agosto</option>
+                        <option value="09" <%= mes === '09' ? 'selected' : '' %>>Septiembre</option>
+                        <option value="10" <%= mes === '10' ? 'selected' : '' %>>Octubre</option>
+                        <option value="11" <%= mes === '11' ? 'selected' : '' %>>Noviembre</option>
+                        <option value="12" <%= mes === '12' ? 'selected' : '' %>>Diciembre</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label for="anio" class="form-label">Año</label>
                     <select class="form-select" id="anio" name="anio">
-                        <option value="">Todos los años</option>
                         <% const currentYear = new Date().getFullYear(); %>
                         <% for(let year = currentYear - 2; year <= currentYear + 2; year++) { %>
                             <option value="<%= year %>" <%= anio && year.toString() === anio.toString() ? 'selected' : '' %>><%= year %></option>
@@ -71,7 +69,7 @@
                                 <tr>
                                     <td><%= ingreso.tipo %></td>
                                     <td class="text-end"><%= ingreso.cantidad_pagos %></td>
-                                    <td class="text-end">S/. <%= parseFloat(ingreso.total_ingresos).toFixed(2) %></td>
+                                    <td class="text-end">Bs/. <%= parseFloat(ingreso.total_ingresos).toFixed(2) %></td>
                                 </tr>
                             <% }); %>
                             

@@ -25,6 +25,8 @@ export const reportePagosPendientes = async (req, res) => {
         
         res.render('reportes/pagos-pendientes', {
             pagosPendientes: pagosPendientes[0] || [],
+            mes: mes || '',
+            anio: anio || '',
             layout: 'layouts/main-layout',
             title: 'Reporte de Pagos Pendientes'
         });

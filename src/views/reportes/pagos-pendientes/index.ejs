@@ -11,29 +11,24 @@
             <form id="filtroForm" class="row g-3">
                 <div class="col-md-4">
                     <label for="mes" class="form-label">Mes</label>
+                    <% const meses = [
+                        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                    ]; %>
                     <select class="form-select" id="mes" name="mes">
-                        <option value="">Todos los meses</option>
-                        <option value="01">Enero</option>
-                        <option value="02">Febrero</option>
-                        <option value="03">Marzo</option>
-                        <option value="04">Abril</option>
-                        <option value="05">Mayo</option>
-                        <option value="06">Junio</option>
-                        <option value="07">Julio</option>
-                        <option value="08">Agosto</option>
-                        <option value="09">Septiembre</option>
-                        <option value="10">Octubre</option>
-                        <option value="11">Noviembre</option>
-                        <option value="12">Diciembre</option>
+                        <% meses.forEach((nombre, index) => {
+                            const valor = (index + 1).toString().padStart(2, '0');
+                        %>
+                            <option value="<%= valor %>" <%= valor === mes ? 'selected' : '' %>><%= nombre %></option>
+                        <% }) %>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label for="anio" class="form-label">Año</label>
+                    <% const currentYear = new Date().getFullYear(); %>
                     <select class="form-select" id="anio" name="anio">
-                        <option value="">Todos los años</option>
-                        <% const currentYear = new Date().getFullYear(); %>
-                        <% for(let year = currentYear - 2; year <= currentYear + 2; year++) { %>
-                            <option value="<%= year %>" <%= year === currentYear ? 'selected' : '' %>><%= year %></option>
+                        <% for (let year = currentYear - 2; year <= currentYear + 2; year++) { %>
+                            <option value="<%= year %>" <%= parseInt(anio) === year ? 'selected' : '' %>><%= year %></option>
                         <% } %>
                     </select>
                 </div>
@@ -103,41 +98,28 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Inicializar DataTable
-        const tabla = $('#tablaPagos').DataTable({
+        $('#tablaPagos').DataTable({
             language: {
                 url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
-            order: [[3, 'asc']], // Ordenar por fecha de pago por defecto
+            order: [[3, 'asc']],
             columnDefs: [
-                { targets: 2, className: 'text-end' }, // Alinear montos a la derecha
-                { targets: 3, type: 'date-eu' } // Especificar que la columna de fecha usa formato europeo
+                { targets: 2, className: 'text-end' },
+                { targets: 3, type: 'date-eu' }
             ]
         });
 
-        // Manejar el envío del formulario
+        // Enviar formulario
         document.getElementById('filtroForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const formData = new FormData(this);
             const params = new URLSearchParams();
-            
-            // Agregar solo los parámetros que tienen valor
             for (const [key, value] of formData.entries()) {
                 if (value) {
                     params.append(key, value);
                 }
             }
-            
-            // Recargar la página con los parámetros de búsqueda
             window.location.href = window.location.pathname + '?' + params.toString();
         });
-
-        // Establecer los valores de los filtros desde la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const mes = urlParams.get('mes');
-        const anio = urlParams.get('anio');
-        
-        if (mes) document.getElementById('mes').value = mes;
-        if (anio) document.getElementById('anio').value = anio;
     });
 </script>
