@@ -10,6 +10,14 @@
         </a>
       </li>
       <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/clientes') ? ' active' : ' text-white-50'%>"
+           style="<%=currentPath.startsWith('/clientes') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
+           href="/clientes">
+          <i class="bi bi-people me-3"></i>
+          <span>Clientes</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
         <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/inmuebles')?' active':' text-white-50'%>" 
            style="<%=currentPath.startsWith('/inmuebles')?'background: rgba(255, 255, 255, 0.1); color: white !important;':' '%>"
            href="/inmuebles">
@@ -17,14 +25,7 @@
           <span>Inmuebles</span>
         </a>
       </li>
-      <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/clientes') ? ' active' : ' text-white-50'%>" 
-           style="<%=currentPath.startsWith('/clientes') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
-           href="/clientes">
-          <i class="bi bi-people me-3"></i>
-          <span>Clientes</span>
-        </a>
-      </li>
+
       <!-- <li class="nav-item mb-3">
         <a class="nav-link d-flex align-items-center py-2 rounded-3 px-3 hover-effect<%=currentPath.startsWith('/visitas') ? ' active' : ' text-white-50'%>" 
            style="<%=currentPath.startsWith('/visitas') ? 'background: rgba(255, 255, 255, 0.1); color: white !important;' : ''%>"
